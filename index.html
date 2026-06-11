@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Santiago Orozco | Ingeniero de Software con IA</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#030712',
+                            card: '#0b0f19',
+                            accent: '#00f2ff',
+                            purple: '#6366f1',
+                            muted: '#94a3b8'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Urbanist', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Urbanist', sans-serif;
+            background-color: #030712;
+        }
+        /* Custom Glowing Effects */
+        .glow-accent {
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.15);
+        }
+        .glow-hover:hover {
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.25);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+        /* Hide Scrollbar but keep functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="text-slate-100 min-h-screen flex flex-col selection:bg-cyan-500 selection:text-slate-900">
+
+    <!-- NOTIFICACIÓN DE COPIADO AL PORTAPAPELES (CUSTOM NOTIFICATION) -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 bg-brand-card border border-brand-accent text-slate-100 px-6 py-4 rounded-xl shadow-2xl translate-y-24 opacity-0 transition-all duration-300 flex items-center gap-3">
+        <i class="fas fa-check-circle text-brand-accent text-xl"></i>
+        <span id="toast-text" class="font-semibold">¡Copiado al portapapeles!</span>
+    </div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="fixed top-0 left-0 w-full z-40 bg-brand-dark/80 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#inicio" class="text-2xl font-extrabold tracking-tight hover:scale-105 transition-transform">
+                SANTIAGO<span class="text-brand-accent">.OROZCO</span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <nav class="hidden md:flex items-center gap-8 font-medium">
+                <a href="#inicio" class="hover:text-brand-accent transition-colors">Inicio</a>
+                <a href="#perfil" class="hover:text-brand-accent transition-colors">Perfil</a>
+                <a href="#habilidades" class="hover:text-brand-accent transition-colors">Habilidades</a>
+                <a href="#experiencia" class="hover:text-brand-accent transition-colors">Experiencia</a>
+                <a href="#proyectos" class="hover:text-brand-accent transition-colors">Proyectos</a>
+                <a href="#educacion" class="hover:text-brand-accent transition-colors">Formación</a>
+                <a href="#contacto" class="hover:text-brand-accent transition-colors">Contacto</a>
+            </nav>
+
+            <!-- CTA / CV Buttons -->
+            <div class="hidden md:flex items-center gap-4">
+                <a href="https://drive.google.com/file/d/1l846yWtQwypUVCh-oNr0UB8t1cOPqCKa/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 rounded-full bg-slate-800 hover:bg-slate-700 text-sm font-semibold transition-all border border-slate-700 flex items-center gap-2 text-slate-200 hover:text-white">
+                    <i class="fas fa-file-pdf text-brand-accent"></i> Ver CV
+                </a>
+                <a href="#contacto" class="px-5 py-2.5 rounded-full bg-brand-accent text-slate-950 hover:bg-white text-sm font-bold transition-all shadow-lg shadow-brand-accent/20">
+                    Contratar
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="menu-btn" class="md:hidden text-2xl focus:outline-none" aria-label="Abrir Menú">
+                <i class="fas fa-bars" id="menu-icon"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer -->
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-dark border-b border-slate-800 px-6 py-6 transition-all duration-300">
+            <nav class="flex flex-col gap-4 font-semibold text-lg">
+                <a href="#inicio" class="mobile-link hover:text-brand-accent py-2 transition-colors">Inicio</a>
+                <a href="#perfil" class="mobile-link hover:text-brand-accent py-2 transition-colors">Perfil</a>
+                <a href="#habilidades" class="mobile-link hover:text-brand-accent py-2 transition-colors">Habilidades</a>
+                <a href="#experiencia" class="mobile-link hover:text-brand-accent py-2 transition-colors">Experiencia</a>
+                <a href="#proyectos" class="mobile-link hover:text-brand-accent py-2 transition-colors">Proyectos</a>
+                <a href="#educacion" class="mobile-link hover:text-brand-accent py-2 transition-colors">Formación</a>
+                <a href="#contacto" class="mobile-link hover:text-brand-accent py-2 transition-colors">Contacto</a>
+                <!-- CV Link en menú móvil -->
+                <a href="https://drive.google.com/file/d/1l846yWtQwypUVCh-oNr0UB8t1cOPqCKa/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="mobile-link py-2.5 px-4 mt-2 rounded-xl bg-slate-900 border border-slate-800 text-brand-accent hover:bg-slate-850 flex items-center justify-center gap-2 text-sm font-bold transition-all">
+                    <i class="fas fa-file-pdf"></i> Ver CV
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow pt-20">
+
+        <!-- HERO SECTION -->
+        <section id="inicio" class="min-h-[calc(100vh-80px)] flex items-center relative py-16 overflow-hidden">
+            <!-- Background lights -->
+            <div class="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-brand-purple/10 rounded-full blur-3xl -z-10"></div>
+            <div class="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-[500px] h-[500px] bg-brand-accent/5 rounded-full blur-3xl -z-10"></div>
+
+            <div class="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <!-- Text Area -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-xs sm:text-sm font-semibold tracking-wider text-brand-accent uppercase">
+                        <span class="w-2 h-2 rounded-full bg-brand-accent animate-pulse"></span> Disponible para nuevos retos
+                    </div>
+                    <h1 class="text-5xl sm:text-6xl xl:text-7xl font-extrabold tracking-tight leading-none text-white">
+                        Santiago Eleazar <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-purple">
+                            Orozco Malca
+                        </span>
+                    </h1>
+                    <p class="text-xl sm:text-2xl text-slate-300 font-medium">
+                        Ingeniero de Software con Inteligencia Artificial
+                    </p>
+                    <p class="text-base sm:text-lg text-brand-muted max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        Especializado en la arquitectura de sistemas multi-agente autónomos, modelado predictivo de Machine Learning y la automatización inteligente del Ciclo de Vida del Software (SDLC).
+                    </p>
+                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
+                        <a href="#contacto" class="px-8 py-4 rounded-full bg-brand-accent text-slate-950 font-bold hover:bg-white hover:scale-105 transition-all shadow-lg shadow-brand-accent/20">
+                            Hablemos <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                        <a href="https://drive.google.com/file/d/1l846yWtQwypUVCh-oNr0UB8t1cOPqCKa/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="px-8 py-4 rounded-full bg-slate-900 border border-slate-800 text-slate-200 font-bold hover:bg-slate-800 hover:text-white transition-all flex items-center justify-center gap-2">
+                            <i class="fas fa-file-pdf text-brand-accent"></i> Descargar CV
+                        </a>
+                        <a href="#experiencia" class="px-8 py-4 rounded-full bg-transparent text-slate-400 font-bold hover:text-white transition-all">
+                            Ver Experiencia
+                        </a>
+                    </div>
+
+                    <!-- Short quick metrics -->
+                    <div class="grid grid-cols-3 gap-6 pt-10 border-t border-slate-900 max-w-lg mx-auto lg:mx-0">
+                        <div>
+                            <p class="text-3xl font-extrabold text-white">1.5+</p>
+                            <p class="text-xs sm:text-sm text-brand-muted">Años de Exp. Técnica</p>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-extrabold text-white">10+</p>
+                            <p class="text-xs sm:text-sm text-brand-muted">Proyectos e IA</p>
+                        </div>
+                        <div>
+                            <p class="text-3xl font-extrabold text-white">B2</p>
+                            <p class="text-xs sm:text-sm text-brand-muted">Inglés Fluido</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Graphic/Visual Area (Mock AI Interface representation) -->
+                <div class="lg:col-span-5 flex justify-center">
+                    <div class="relative w-full max-w-[420px] aspect-square rounded-3xl bg-gradient-to-tr from-brand-purple/20 to-brand-accent/20 p-1 glow-accent">
+                        <div class="w-full h-full bg-brand-card rounded-[22px] overflow-hidden p-6 flex flex-col justify-between border border-slate-800/80">
+                            <!-- Code Header -->
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                                    <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                                    <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                                </div>
+                                <span class="text-xs text-slate-500">agent_orchestrator.py</span>
+                            </div>
+                            
+                            <!-- Main Visual Console -->
+                            <div class="my-6 flex-grow flex flex-col justify-center gap-4 text-left font-mono text-sm">
+                                <p class="text-emerald-400"><span class="text-slate-500">>>></span> import agent_framework as af</p>
+                                <p class="text-cyan-400"><span class="text-slate-500">>>></span> system = af.MultiAgentSystem()</p>
+                                <p class="text-slate-400"><span class="text-slate-500">>>></span> system.optimize_sdlc(dev="Santiago")</p>
+                                <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800 space-y-1 text-xs">
+                                    <p class="text-slate-400">[Agent-01] Analizando código...</p>
+                                    <p class="text-brand-accent">[Agent-02] Optimizando compilación: +42% velocidad</p>
+                                    <p class="text-brand-purple">[System] Pipeline CI/CD automatizado con éxito.</p>
+                                </div>
+                            </div>
+
+                            <!-- Footer Status -->
+                            <div class="flex items-center justify-between text-xs text-slate-400 pt-4 border-t border-slate-800">
+                                <span>Status: <strong class="text-emerald-400">Online</strong></span>
+                                <span>Model: Gemini 2.5 & LLMs</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROFILE SECTION -->
+        <section id="perfil" class="py-24 bg-brand-card/30 relative">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs font-bold uppercase tracking-widest text-brand-accent mb-2">Sobre Mí</h2>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-white">Perfil Profesional e Innovación</p>
+                    <div class="w-16 h-1 bg-brand-accent mx-auto mt-4"></div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <!-- Left Image (Professional Abstract representation) -->
+                    <div class="lg:col-span-5">
+                        <div class="rounded-2xl overflow-hidden border border-slate-800 shadow-2xl relative group">
+                            <!-- Visual placeholder simulating high-tech studio or workspace -->
+                            <img src="http://googleusercontent.com/image_collection/image_retrieval/16225541254998702979" alt="[Espacio de trabajo moderno con iluminación LED]" class="w-full h-[400px] object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent"></div>
+                            <div class="absolute bottom-6 left-6 right-6">
+                                <p class="text-xs font-semibold text-brand-accent uppercase tracking-wider">Santiago Orozco</p>
+                                <p class="text-lg font-bold text-white">Impulsando soluciones de Software con el poder de la Inteligencia Artificial.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Description -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <h3 class="text-2xl sm:text-3xl font-bold text-white">Estudiante de Ingeniería de Software con IA en SENATI</h3>
+                        <p class="text-lg text-slate-300 leading-relaxed">
+                            Próximo a graduarme en el 2026, he enfocado mi trayectoria académica y profesional en la frontera tecnológica del desarrollo moderno: la convergencia de la <strong>arquitectura de software estructurada</strong> y las <strong>capacidades cognitivas de los agentes inteligentes</strong>.
+                        </p>
+                        <p class="text-lg text-brand-muted leading-relaxed">
+                            He desempeñado roles orientados a optimizar el ciclo de desarrollo de software (SDLC) mediante la automatización inteligente. Mi enfoque consiste en implementar pipelines automatizados de DevOps y sistemas expertos que reduzcan el tiempo de producción manteniendo la máxima calidad técnica.
+                        </p>
+                        
+                        <!-- Mini Highlights Grid -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-brand-accent/10 border border-brand-accent/20 flex items-center justify-center text-brand-accent shrink-0">
+                                    <i class="fas fa-shield-halved"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white text-base">Código Seguro y Estable</h4>
+                                    <p class="text-sm text-brand-muted">Adhesión a patrones de diseño limpios.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-brand-purple/10 border border-brand-purple/20 flex items-center justify-center text-brand-purple shrink-0">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-white text-base">Agentes Multi-Proceso</h4>
+                                    <p class="text-sm text-brand-muted">Automatización inteligente de extremo a extremo.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SKILLS SECTION -->
+        <section id="habilidades" class="py-24">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs font-bold uppercase tracking-widest text-brand-accent mb-2">Habilidades</h2>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-white">Dominio Técnico y Tecnologías</p>
+                    <div class="w-16 h-1 bg-brand-accent mx-auto mt-4"></div>
+                </div>
+
+                <!-- Grid of Skills with visual representation -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- IA y Agentes -->
+                    <div class="bg-brand-card p-8 rounded-2xl border border-slate-800 hover:border-brand-accent/30 transition-all duration-300 group">
+                        <div class="w-14 h-14 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-brand-accent mb-6 text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Sistemas de IA & Agentes</h3>
+                        <p class="text-brand-muted text-base mb-6">
+                            Arquitectura e integración de sistemas multi-agente, automatización de tareas cognitivas y flujos autónomos de decisión.
+                        </p>
+                        <!-- Tech Tags -->
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-slate-900 border border-slate-800 rounded-md text-xs text-brand-accent font-medium">Multi-Agents</span>
+                            <span class="px-3 py-1 bg-slate-900 border border-slate-800 rounded-md text-xs text-brand-accent font-medium">Prompt Engineering</span>
+                            <span class="px-3 py-1 bg-slate-900 border border-slate-800 rounded-md text-xs text-brand-accent font-medium">Agentes Autónomos</span>
+                        </div>
+                    </div>
+
+                    <!-- Machine Learning -->
+                    <div class="bg-brand-card p-8 rounded-2xl border border-slate-800 hover:border-brand-purple/30 transition-all duration-300 group">
+                        <div class="w-14 h-14 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-brand-purple mb-6 text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Machine Learning</h3>
+                        <p class="text-brand-muted text-base mb-6">
+                            Análisis exploratorio de datos (EDA), entrenamiento y despliegue de modelos predictivos y optimización de algoritmos.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-slate-900 border border-slate-800 rounded-md text-xs text-brand-purple font-medium">Python</span>
+                            <span class="px-3 py-1 bg-slate-900 border border-slate-800 rounded-md text-xs text-brand-purple font-medium">Scikit-Learn</span>
+                            <span class="px-3 py-1 bg-slate-900 border border-slate-800 rounded-md text-xs text-brand-purple font-medium">Modelos Predictivos</span>
+                        </div>
+                    </div>
+
+                    <!-- Desarrollo Full-Stack & Cloud -->
+                    <div class="bg-brand-card p-8 rounded-2xl border border-slate-800 hover:border-cyan-500/30 transition-all duration-300 group">
+                        <div class="w-14 h-14 rounded-xl bg-brand-accent/10 border border-brand-accent/20 flex items-center justify-center text-brand-accent mb-6 text-2xl group-hover:scale-110 transition-transform">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Full-Stack & Integraciones</h3>
+                        <p class="text-brand-muted text-base mb-6">
+                            Construcción y mantenimiento de plataformas web robustas, despliegue en la nube e integraciones seguras de APIs RESTful.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-slate-900 border border-slate-800 rounded-md text-xs text-brand-accent font-medium">Node.js</span>
+                            <span class="px-3 py-1 bg-slate-900 border border-slate-800 rounded-md text-xs text-brand-accent font-medium">APIs REST</span>
+                            <span class="px-3 py-1 bg-slate-900 border border-slate-800 rounded-md text-xs text-brand-accent font-medium">Cloud Despliegues</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE TIMELINE SECTION -->
+        <section id="experiencia" class="py-24 bg-brand-card/20 relative">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs font-bold uppercase tracking-widest text-brand-accent mb-2">Trayectoria</h2>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-white">Experiencia Profesional</p>
+                    <div class="w-16 h-1 bg-brand-accent mx-auto mt-4"></div>
+                </div>
+
+                <!-- Vertical Interactive-Like Timeline -->
+                <div class="relative max-w-4xl mx-auto">
+                    <!-- Line in center-left -->
+                    <div class="absolute left-4 md:left-1/2 top-0 h-full w-0.5 bg-slate-800"></div>
+
+                    <!-- Card 1: Agrosoft -->
+                    <div class="relative mb-12 flex flex-col md:flex-row items-stretch">
+                        <!-- Dot -->
+                        <div class="absolute left-4 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-brand-accent ring-4 ring-brand-accent/20 z-10"></div>
+                        
+                        <!-- Left blank/right content on desktop -->
+                        <div class="w-full md:w-1/2 md:pr-12 md:text-right hidden md:block">
+                            <!-- Just for spacing -->
+                        </div>
+                        <div class="w-full md:w-1/2 pl-12 md:pl-12">
+                            <div class="bg-brand-card p-6 sm:p-8 rounded-2xl border border-slate-800 hover:border-brand-accent/30 transition-all duration-300">
+                                <span class="text-xs font-bold uppercase text-brand-accent tracking-wider bg-slate-900/80 px-3 py-1 rounded-md border border-slate-800">Ene 2026 - Jun 2026</span>
+                                <h3 class="text-2xl font-bold text-white mt-4">Dev Software Jr (Prácticas)</h3>
+                                <p class="text-brand-purple font-semibold text-base mb-4">Agrosoft Solutions</p>
+                                <ul class="space-y-2 text-brand-muted text-base text-left">
+                                    <li class="flex items-start gap-2">
+                                        <i class="fas fa-check-circle text-brand-accent mt-1.5 shrink-0"></i>
+                                        <span>Lideré la investigación e implementación de arquitecturas multi-agente personalizadas destinadas a acelerar los procesos de control de calidad del código.</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <i class="fas fa-check-circle text-brand-accent mt-1.5 shrink-0"></i>
+                                        <span>Optimizé workflows internos mediante la automatización inteligente de flujos del SDLC.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Tech Solutions -->
+                    <div class="relative mb-12 flex flex-col md:flex-row items-stretch">
+                        <!-- Dot -->
+                        <div class="absolute left-4 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-brand-purple ring-4 ring-brand-purple/20 z-10"></div>
+                        
+                        <div class="w-full md:w-1/2 pr-0 md:pr-12 text-left md:text-right pl-12 md:pl-0">
+                            <div class="bg-brand-card p-6 sm:p-8 rounded-2xl border border-slate-800 hover:border-brand-purple/30 transition-all duration-300">
+                                <span class="text-xs font-bold uppercase text-brand-purple tracking-wider bg-slate-900/80 px-3 py-1 rounded-md border border-slate-800">Jul 2025 - Dic 2025</span>
+                                <h3 class="text-2xl font-bold text-white mt-4">Asistente de Desarrollo Web</h3>
+                                <p class="text-brand-accent font-semibold text-base mb-4">Tech Solutions</p>
+                                <ul class="space-y-2 text-brand-muted text-base text-left md:text-right">
+                                    <li class="flex items-start md:flex-row-reverse gap-2">
+                                        <i class="fas fa-check-circle text-brand-purple mt-1.5 shrink-0"></i>
+                                        <span>Ejecuté mantenimiento preventivo e implementé optimizaciones críticas de rendimiento en portales web institucionales.</span>
+                                    </li>
+                                    <li class="flex items-start md:flex-row-reverse gap-2">
+                                        <i class="fas fa-check-circle text-brand-purple mt-1.5 shrink-0"></i>
+                                        <span>Aseguré integraciones seguras de APIs externas de procesamiento y asistí activamente en despliegues optimizados en nubes públicas.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 pl-12 hidden md:block">
+                            <!-- Just for spacing -->
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Computer Center -->
+                    <div class="relative flex flex-col md:flex-row items-stretch">
+                        <!-- Dot -->
+                        <div class="absolute left-4 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-brand-accent ring-4 ring-brand-accent/20 z-10"></div>
+                        
+                        <div class="w-full md:w-1/2 md:pr-12 md:text-right hidden md:block">
+                            <!-- Just for spacing -->
+                        </div>
+                        <div class="w-full md:w-1/2 pl-12 md:pl-12">
+                            <div class="bg-brand-card p-6 sm:p-8 rounded-2xl border border-slate-800 hover:border-brand-accent/30 transition-all duration-300">
+                                <span class="text-xs font-bold uppercase text-brand-accent tracking-wider bg-slate-900/80 px-3 py-1 rounded-md border border-slate-800">Ene 2025 - Jun 2025</span>
+                                <h3 class="text-2xl font-bold text-white mt-4">Soporte Técnico Informático</h3>
+                                <p class="text-brand-purple font-semibold text-base mb-4">Computer Center</p>
+                                <ul class="space-y-2 text-brand-muted text-base text-left">
+                                    <li class="flex items-start gap-2">
+                                        <i class="fas fa-check-circle text-brand-accent mt-1.5 shrink-0"></i>
+                                        <span>Configuración de infraestructuras de red locales, ruteo básico e instalación de hardware informático corporativo.</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <i class="fas fa-check-circle text-brand-accent mt-1.5 shrink-0"></i>
+                                        <span>Resolución ágil de incidencias técnicas en estaciones de trabajo y sistemas operativos a nivel de hardware y redes.</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS PORTFOLIO (INTERACTIVE FILTER) -->
+        <section id="proyectos" class="py-24">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <h2 class="text-xs font-bold uppercase tracking-widest text-brand-accent mb-2">Casos de Éxito</h2>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-white">Proyectos Destacados</p>
+                    <div class="w-16 h-1 bg-brand-accent mx-auto mt-4"></div>
+                </div>
+
+                <!-- Filter Controls -->
+                <div class="flex flex-wrap items-center justify-center gap-4 mb-12">
+                    <button class="filter-btn active px-6 py-2 rounded-full border border-slate-800 text-sm font-semibold transition-all hover:bg-slate-900" data-filter="all">
+                        Todos
+                    </button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-slate-800 text-sm font-semibold text-brand-muted transition-all hover:bg-slate-900 hover:text-white" data-filter="ai">
+                        Sistemas de IA
+                    </button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-slate-800 text-sm font-semibold text-brand-muted transition-all hover:bg-slate-900 hover:text-white" data-filter="ml">
+                        Machine Learning
+                    </button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-slate-800 text-sm font-semibold text-brand-muted transition-all hover:bg-slate-900 hover:text-white" data-filter="web">
+                        Desarrollo Web / Cloud
+                    </button>
+                </div>
+
+                <!-- Project Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="project-container">
+                    <!-- Project 1: Multi-Agent Dev -->
+                    <div class="project-card bg-brand-card rounded-2xl overflow-hidden border border-slate-800 hover:border-slate-750 transition-all duration-300" data-category="ai">
+                        <div class="relative h-60 overflow-hidden">
+                            <img src="http://googleusercontent.com/image_collection/image_retrieval/3015858408452602898" alt="[Red visual de nodos conectados representando redes neuronales]" class="w-full h-full object-cover">
+                            <div class="absolute top-4 right-4 px-3 py-1 bg-brand-dark/90 backdrop-blur-md border border-slate-800 text-xs text-brand-accent font-bold rounded-md">Multi-Agentes</div>
+                        </div>
+                        <div class="p-8">
+                            <h3 class="text-2xl font-bold text-white mb-2">Orquestador Multi-Agente SDLC</h3>
+                            <p class="text-brand-muted text-base mb-6">
+                                Diseñado e implementado para Agrosoft Solutions. Automatiza la revisión de estándares de código, corrección sintáctica y despliegues CI/CD en un pipeline unificado mediante micro-agentes especializados.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="px-2.5 py-1 bg-slate-900 border border-slate-850 rounded text-xs text-slate-400">Python</span>
+                                <span class="px-2.5 py-1 bg-slate-900 border border-slate-850 rounded text-xs text-slate-400">LangChain</span>
+                                <span class="px-2.5 py-1 bg-slate-900 border border-slate-850 rounded text-xs text-slate-400">Gemini API</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 2: Predictive Crop Analytics -->
+                    <div class="project-card bg-brand-card rounded-2xl overflow-hidden border border-slate-800 hover:border-slate-750 transition-all duration-300" data-category="ml">
+                        <div class="relative h-60 overflow-hidden">
+                            <img src="http://googleusercontent.com/image_collection/image_retrieval/8094491536007496657" alt="[Análisis predictivo e interfaces gráficas con gráficos estadísticos]" class="w-full h-full object-cover">
+                            <div class="absolute top-4 right-4 px-3 py-1 bg-brand-dark/90 backdrop-blur-md border border-slate-800 text-xs text-brand-purple font-bold rounded-md">Machine Learning</div>
+                        </div>
+                        <div class="p-8">
+                            <h3 class="text-2xl font-bold text-white mb-2">Sistema Predictivo de Rendimiento Agrícola</h3>
+                            <p class="text-brand-muted text-base mb-6">
+                                Implementación de un modelo de análisis predictivo basado en condiciones climáticas locales y variables agroindustriales, incrementando la precisión en proyecciones de cosecha.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="px-2.5 py-1 bg-slate-900 border border-slate-850 rounded text-xs text-slate-400">Scikit-Learn</span>
+                                <span class="px-2.5 py-1 bg-slate-900 border border-slate-850 rounded text-xs text-slate-400">Pandas</span>
+                                <span class="px-2.5 py-1 bg-slate-900 border border-slate-850 rounded text-xs text-slate-400">Matplotlib</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 3: API Integration Hub -->
+                    <div class="project-card bg-brand-card rounded-2xl overflow-hidden border border-slate-800 hover:border-slate-750 transition-all duration-300" data-category="web">
+                        <div class="relative h-60 overflow-hidden">
+                            <img src="http://googleusercontent.com/image_collection/image_retrieval/12685882269588154359" alt="[Entorno de desarrollo de software con líneas de código en pantalla]" class="w-full h-full object-cover">
+                            <div class="absolute top-4 right-4 px-3 py-1 bg-brand-dark/90 backdrop-blur-md border border-slate-800 text-xs text-brand-accent font-bold rounded-md">Web & API</div>
+                        </div>
+                        <div class="p-8">
+                            <h3 class="text-2xl font-bold text-white mb-2">Plataforma de Integración de Servicios</h3>
+                            <p class="text-brand-muted text-base mb-6">
+                                Arquitectura de integración segura de APIs de terceros con autenticación robusta y almacenamiento en la nube, garantizando operaciones sin interrupciones con alta concurrencia.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="px-2.5 py-1 bg-slate-900 border border-slate-850 rounded text-xs text-slate-400">Node.js</span>
+                                <span class="px-2.5 py-1 bg-slate-900 border border-slate-850 rounded text-xs text-slate-400">Express</span>
+                                <span class="px-2.5 py-1 bg-slate-900 border border-slate-850 rounded text-xs text-slate-400">MongoDB</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project 4: Cloud Infrastructure Deployment -->
+                    <div class="project-card bg-brand-card rounded-2xl overflow-hidden border border-slate-800 hover:border-slate-750 transition-all duration-300" data-category="web">
+                        <div class="relative h-60 overflow-hidden">
+                            <img src="http://googleusercontent.com/image_collection/image_retrieval/620430444705820174" alt="[Estructura metálica y ordenadores de procesamiento de servidores modernos]" class="w-full h-full object-cover">
+                            <div class="absolute top-4 right-4 px-3 py-1 bg-brand-dark/90 backdrop-blur-md border border-slate-800 text-xs text-brand-purple font-bold rounded-md">DevOps / Cloud</div>
+                        </div>
+                        <div class="p-8">
+                            <h3 class="text-2xl font-bold text-white mb-2">Automatización de Despliegue en Servidores</h3>
+                            <p class="text-brand-muted text-base mb-6">
+                                Pipeline automatizado de aprovisionamiento de infraestructura y configuración automatizada de redes internas empresariales, minimizando la intervención manual.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="px-2.5 py-1 bg-slate-900 border border-slate-850 rounded text-xs text-slate-400">Docker</span>
+                                <span class="px-2.5 py-1 bg-slate-900 border border-slate-850 rounded text-xs text-slate-400">Linux</span>
+                                <span class="px-2.5 py-1 bg-slate-900 border border-slate-850 rounded text-xs text-slate-400">Nginx</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EDUCATION & SPECIALIZATIONS SECTION -->
+        <section id="educacion" class="py-24 bg-brand-card/20 relative">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs font-bold uppercase tracking-widest text-brand-accent mb-2">Formación</h2>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-white">Educación y Especialización</p>
+                    <div class="w-16 h-1 bg-brand-accent mx-auto mt-4"></div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <!-- Left: Education Core Card -->
+                    <div class="lg:col-span-6 space-y-8">
+                        <div class="bg-gradient-to-r from-brand-accent/10 to-brand-purple/10 border border-slate-800 p-8 rounded-3xl relative overflow-hidden">
+                            <div class="absolute -top-10 -right-10 w-40 h-40 bg-brand-accent/5 rounded-full blur-2xl"></div>
+                            <span class="px-3 py-1 bg-brand-accent text-slate-950 font-extrabold text-xs tracking-wider rounded-md uppercase">Carrera Profesional</span>
+                            <h3 class="text-3xl font-extrabold text-white mt-4 mb-2">Ingeniería de Software con IA</h3>
+                            <p class="text-brand-purple font-semibold text-lg">SENATI</p>
+                            <p class="text-slate-400 mt-2 text-sm">2024 - Próximo a egresar (2026)</p>
+                            <div class="mt-6 border-t border-slate-800 pt-6">
+                                <p class="text-slate-300">
+                                    Enfoque integral que fusiona los fundamentos estructurados del desarrollo de sistemas avanzados con capacidades avanzadas de modelos de lenguaje, deep learning y aprendizaje computacional.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Extracurricular Activities / Research Group -->
+                        <div class="bg-brand-card border border-slate-800 p-8 rounded-3xl flex items-start gap-5">
+                            <div class="w-12 h-12 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent text-2xl shrink-0 border border-brand-accent/20">
+                                <i class="fas fa-vial"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-white mb-2">Grupo de Investigación de IA Aplicada</h4>
+                                <p class="text-sm text-slate-400">SENATI (2025 - 2026)</p>
+                                <p class="text-brand-muted text-base mt-2">
+                                    Participación activa en el estudio de arquitecturas avanzadas de redes neuronales aplicadas a la optimización de procesos industriales locales.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Specialization Certificates -->
+                    <div class="lg:col-span-6 space-y-6">
+                        <h3 class="text-2xl font-bold text-white">Certificaciones y Especialidades</h3>
+                        
+                        <!-- Course 1 -->
+                        <div class="bg-brand-card p-6 rounded-2xl border border-slate-800 hover:border-slate-700 transition-colors flex justify-between items-center">
+                            <div>
+                                <h4 class="text-lg font-bold text-white">Especialización en Machine Learning</h4>
+                                <p class="text-brand-muted text-sm mt-1">SENATI • 80 Horas Lectivas</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-brand-accent shrink-0">
+                                <i class="fas fa-certificate"></i>
+                            </div>
+                        </div>
+
+                        <!-- Course 2 -->
+                        <div class="bg-brand-card p-6 rounded-2xl border border-slate-800 hover:border-slate-700 transition-colors flex justify-between items-center">
+                            <div>
+                                <h4 class="text-lg font-bold text-white">Seminario de Práctica Profesional II</h4>
+                                <p class="text-brand-muted text-sm mt-1">SENATI • 60 Horas Lectivas</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-brand-accent shrink-0">
+                                <i class="fas fa-certificate"></i>
+                            </div>
+                        </div>
+
+                        <!-- English -->
+                        <div class="bg-brand-card p-6 rounded-2xl border border-slate-800 hover:border-slate-700 transition-colors flex justify-between items-center">
+                            <div>
+                                <h4 class="text-lg font-bold text-white">Inglés B2 (Intermedio Avanzado)</h4>
+                                <p class="text-brand-muted text-sm mt-1">Capacidad para redactar documentación técnica y entablar diálogos ágiles en entornos de TI globales.</p>
+                            </div>
+                            <span class="px-3 py-1 bg-brand-purple text-white text-xs font-bold rounded-md">B2 Level</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT & REFERENCES SECTION -->
+        <section id="contacto" class="py-24">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs font-bold uppercase tracking-widest text-brand-accent mb-2">Contacto</h2>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-white">Trabajemos Juntos</p>
+                    <div class="w-16 h-1 bg-brand-accent mx-auto mt-4"></div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                    <!-- Left: Contact info / references -->
+                    <div class="lg:col-span-5 space-y-8">
+                        <div class="space-y-4">
+                            <h3 class="text-2xl font-bold text-white">Canales Directos</h3>
+                            <p class="text-brand-muted text-base leading-relaxed">
+                                Contácteme para consultas técnicas, proyectos integrales de software con IA o integraciones de sistemas multi-agente en su infraestructura corporativa.
+                            </p>
+                        </div>
+
+                        <!-- Quick Copyable info cards -->
+                        <div class="space-y-4">
+                            <!-- Email -->
+                            <div class="flex items-center justify-between p-4 rounded-xl bg-brand-card border border-slate-800 hover:border-slate-700 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center text-brand-accent text-lg">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-brand-muted font-bold">EMAIL</p>
+                                        <p class="text-sm font-bold text-white text-slate-100 break-all select-all">santiagoeleazarmalca@gmail.com</p>
+                                    </div>
+                                </div>
+                                <button onclick="copyToClipboard('santiagoeleazarmalca@gmail.com', '¡Email copiado al portapapeles!')" class="p-2 text-slate-500 hover:text-brand-accent transition-colors" title="Copiar Email" aria-label="Copiar Correo">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="flex items-center justify-between p-4 rounded-xl bg-brand-card border border-slate-800 hover:border-slate-700 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center text-brand-accent text-lg">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-brand-muted font-bold">TELEFONO</p>
+                                        <p class="text-sm font-bold text-white text-slate-100 select-all">+51 919 685 065</p>
+                                    </div>
+                                </div>
+                                <button onclick="copyToClipboard('+51919685065', '¡Teléfono copiado al portapapeles!')" class="p-2 text-slate-500 hover:text-brand-accent transition-colors" title="Copiar Teléfono" aria-label="Copiar Teléfono">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+
+                            <!-- DNI & Others -->
+                            <div class="flex items-center gap-3 p-4 rounded-xl bg-brand-card border border-slate-800">
+                                <div class="w-10 h-10 rounded-lg bg-brand-purple/10 flex items-center justify-center text-brand-purple text-lg">
+                                    <i class="fas fa-id-card"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-brand-muted font-bold">DNI</p>
+                                    <p class="text-sm font-bold text-white">60896264</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- References (Accordion/List) -->
+                        <div class="space-y-4">
+                            <h4 class="text-xl font-bold text-slate-200">Referencias Profesionales</h4>
+                            
+                            <!-- Ref 1 -->
+                            <div class="p-4 rounded-xl bg-brand-card border border-slate-800 space-y-2">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <p class="font-bold text-white text-base">Ing. Ivan Calle Castillo</p>
+                                        <p class="text-xs text-brand-accent">Instructor Técnico • SENATI</p>
+                                    </div>
+                                    <span class="text-xs font-bold text-brand-muted bg-slate-900 border border-slate-800 px-2 py-0.5 rounded">Académica</span>
+                                </div>
+                                <div class="text-xs text-slate-400 space-y-1">
+                                    <p><i class="fas fa-envelope mr-1.5 text-slate-500"></i> ivan.calle@senati.edu.pe</p>
+                                    <p><i class="fas fa-phone mr-1.5 text-slate-500"></i> +51 999 999 999</p>
+                                </div>
+                            </div>
+
+                            <!-- Ref 2 -->
+                            <div class="p-4 rounded-xl bg-brand-card border border-slate-800 space-y-2">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <p class="font-bold text-white text-base">Gerente Orlando Hurtado</p>
+                                        <p class="text-xs text-brand-purple">Gerente General • Agrosoft Solutions</p>
+                                    </div>
+                                    <span class="text-xs font-bold text-brand-muted bg-slate-900 border border-slate-800 px-2 py-0.5 rounded">Laboral</span>
+                                </div>
+                                <div class="text-xs text-slate-400 space-y-1">
+                                    <p><i class="fas fa-envelope mr-1.5 text-slate-500"></i> orlandohur@agrosoft.com</p>
+                                    <p><i class="fas fa-phone mr-1.5 text-slate-500"></i> +51 988 888 888</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Aesthetic and Functional Simulated Contact Form -->
+                    <div class="lg:col-span-7">
+                        <div class="bg-brand-card p-8 rounded-3xl border border-slate-800 shadow-2xl relative">
+                            <!-- Overlay Success card -->
+                            <div id="form-success" class="absolute inset-0 bg-brand-card rounded-3xl flex flex-col items-center justify-center text-center p-8 z-10 hidden">
+                                <div class="w-20 h-20 rounded-full bg-cyan-500/10 border border-brand-accent/20 flex items-center justify-center text-brand-accent text-4xl mb-6">
+                                    <i class="fas fa-paper-plane animate-bounce"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-white mb-2">¡Mensaje Recibido!</h3>
+                                <p class="text-brand-muted max-w-sm mb-6">Gracias por ponerse en contacto. Le responderé en un lapso no mayor a 24 horas.</p>
+                                <button onclick="resetContactForm()" class="px-6 py-2.5 rounded-full bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-200 transition-colors text-sm font-semibold">
+                                    Enviar otro mensaje
+                                </button>
+                            </div>
+
+                            <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                                <h3 class="text-2xl font-bold text-white">Envíe un Mensaje Directo</h3>
+                                
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                    <!-- Nombre -->
+                                    <div class="space-y-2">
+                                        <label for="name" class="text-sm font-bold text-slate-300 block">Su Nombre *</label>
+                                        <input type="text" id="name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-accent transition-colors" placeholder="Ej. Juan Pérez">
+                                    </div>
+                                    <!-- Correo -->
+                                    <div class="space-y-2">
+                                        <label for="email" class="text-sm font-bold text-slate-300 block">Correo Electrónico *</label>
+                                        <input type="email" id="email" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-accent transition-colors" placeholder="juan@correo.com">
+                                    </div>
+                                </div>
+
+                                <!-- Asunto -->
+                                <div class="space-y-2">
+                                    <label for="subject" class="text-sm font-bold text-slate-300 block">Asunto *</label>
+                                    <input type="text" id="subject" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-accent transition-colors" placeholder="Ej. Oportunidad de Proyecto / Prácticas">
+                                </div>
+
+                                <!-- Mensaje -->
+                                <div class="space-y-2">
+                                    <label for="message" class="text-sm font-bold text-slate-300 block">Mensaje *</label>
+                                    <textarea id="message" rows="5" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-accent transition-colors resize-none" placeholder="Escriba aquí los detalles..."></button></textarea>
+                                </div>
+
+                                <!-- Submit btn -->
+                                <button type="submit" id="submit-btn" class="w-full py-4 rounded-xl bg-brand-accent hover:bg-white text-slate-950 font-bold transition-all shadow-lg flex items-center justify-center gap-2">
+                                    <span>Enviar Mensaje</span> <i class="fas fa-paper-plane text-xs"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-brand-dark border-t border-slate-900 py-12">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+            <p class="text-sm text-slate-500">
+                &copy; 2026 Santiago Eleazar Orozco Malca. Todos los derechos reservados.
+            </p>
+            <div class="flex gap-6 text-xl">
+                <a href="mailto:santiagoeleazarmalca@gmail.com" class="text-slate-500 hover:text-brand-accent transition-colors" aria-label="Enviar Correo">
+                    <i class="fas fa-envelope"></i>
+                </a>
+                <a href="tel:+51919685065" class="text-slate-500 hover:text-brand-accent transition-colors" aria-label="Llamar">
+                    <i class="fas fa-phone"></i>
+                </a>
+                <a href="#inicio" class="text-slate-500 hover:text-brand-accent transition-colors" aria-label="Volver arriba">
+                    <i class="fas fa-arrow-up"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTION LOGIC (MOBILE MENU, COPY CLIPBOARD, PROJECTS FILTER, SIMULATED FORM SUBMIT) -->
+    <script>
+        // 1. Mobile Menu Drawer Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            if (mobileMenu.classList.contains('hidden')) {
+                menuIcon.className = 'fas fa-bars';
+            } else {
+                menuIcon.className = 'fas fa-xmark';
+            }
+        });
+
+        // Close mobile drawer on link click
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                menuIcon.className = 'fas fa-bars';
+            });
+        });
+
+        // 2. Custom Clipboard Copy Trigger (Safe implementation)
+        function copyToClipboard(text, successMsg) {
+            const tempInput = document.createElement('textarea');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand('copy');
+                showToast(successMsg);
+            } catch (err) {
+                showToast('Error al intentar copiar.');
+            }
+            document.body.removeChild(tempInput);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toast-text');
+            toastText.textContent = message;
+            
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3000);
+        }
+
+        // 3. Simulated Project Filter Action
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Change Active style classes
+                filterBtns.forEach(b => {
+                    b.classList.remove('active', 'text-slate-100', 'bg-brand-accent');
+                    b.classList.add('text-brand-muted', 'bg-transparent');
+                });
+                
+                btn.classList.add('active', 'text-slate-900', 'bg-brand-accent');
+                btn.classList.remove('text-brand-muted', 'bg-transparent');
+
+                const selectedCategory = btn.getAttribute('data-filter');
+
+                projectCards.forEach(card => {
+                    const cardCategory = card.getAttribute('data-category');
+                    if (selectedCategory === 'all' || cardCategory === selectedCategory) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 4. Form Submit Action (Simulates sending & shows modern confirmation card)
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const submitBtn = document.getElementById('submit-btn');
+            
+            // Visual loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>Procesando...</span> <i class="fas fa-spinner animate-spin"></i>';
+
+            setTimeout(() => {
+                // Reset submit button state
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Enviar Mensaje</span> <i class="fas fa-paper-plane text-xs"></i>';
+                
+                // Show Success Overlay Screen
+                const successOverlay = document.getElementById('form-success');
+                successOverlay.classList.remove('hidden');
+            }, 1200);
+        }
+
+        function resetContactForm() {
+            const successOverlay = document.getElementById('form-success');
+            const form = document.getElementById('contact-form');
+            form.reset();
+            successOverlay.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
